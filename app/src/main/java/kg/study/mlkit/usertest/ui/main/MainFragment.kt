@@ -1,13 +1,16 @@
 package kg.study.mlkit.usertest.ui.main
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.SearchView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import kg.study.mlkit.usertest.adapter.UserAdapter
 import kg.study.mlkit.usertest.databinding.MainFragmentBinding
+import kg.study.mlkit.usertest.db.model.User
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
@@ -20,8 +23,10 @@ class MainFragment : Fragment() {
     private lateinit var binding: MainFragmentBinding
     private var adapter = UserAdapter()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -30,6 +35,7 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupAdapter()
         setupObservers()
+        search()
     }
 
     private fun setupObservers() = with(binding) {
@@ -45,4 +51,25 @@ class MainFragment : Fragment() {
         }
     }
 
+    private fun delete(user: User) {
+        viewModel.delete(user = user)
+    }
+
+    private fun search() {
+
+        binding.search.queryHint = "Find User"
+        binding.search.setOnQueryTextListener(object: androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                if (p0!!.length > 2) {
+                    viewModel.findUserWithName(p0)
+                    adapter.find(p0)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                return false
+            }
+        })
+    }
 }

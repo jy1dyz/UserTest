@@ -36,6 +36,14 @@ class UserAdapter: RecyclerView.Adapter<UserAdapter.UserHolder>() {
         notifyDataSetChanged()
     }
 
+    fun find(value: String) {
+       val filter = this.list.filter {
+           it.firstName == value
+       }
+        list.clear()
+        list.addAll(filter)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserHolder {
         val inflater = LayoutInflater.from(parent.context)
