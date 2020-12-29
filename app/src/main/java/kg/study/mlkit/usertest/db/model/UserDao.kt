@@ -22,4 +22,14 @@ interface UserDao {
 
     @Query("SELECT * FROM User WHERE firstName LIKE :search OR lastName LIKE :search")
     fun findUserWithName(search: String): LiveData<List<User>>
+
+    /** One-to-One*/
+    @Transaction
+    @Query("SELECT * FROM User")
+    fun getUsersAndDogs(): LiveData<List<UserAndDog>>
+
+    /** One-to-Many*/
+    @Transaction
+    @Query("SELECT * FROM User")
+    fun getUsersWithDogs():LiveData<List<UserWithDogs>>
 }

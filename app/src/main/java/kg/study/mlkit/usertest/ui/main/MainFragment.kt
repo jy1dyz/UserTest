@@ -7,7 +7,9 @@ import android.view.*
 import android.widget.SearchView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.google.android.material.snackbar.Snackbar
+import kg.study.mlkit.usertest.adapter.DogsAdapter
 import kg.study.mlkit.usertest.adapter.UserAdapter
 import kg.study.mlkit.usertest.databinding.MainFragmentBinding
 import kg.study.mlkit.usertest.db.model.User
@@ -22,6 +24,7 @@ class MainFragment : Fragment() {
     private val viewModel: MainViewModel by viewModel()
     private lateinit var binding: MainFragmentBinding
     private var adapter = UserAdapter()
+    private var dogsAdapter = DogsAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,7 +42,13 @@ class MainFragment : Fragment() {
     }
 
     private fun setupObservers() = with(binding) {
-        viewModel.users.observe(viewLifecycleOwner, {
+//        viewModel.users.observe(viewLifecycleOwner, {
+//            adapter.refresh(it.toMutableList())
+//        })
+//        viewModel.usersAndDogs.observe(viewLifecycleOwner, {
+//            adapter.refresh(it.toMutableList())
+//        })
+        viewModel.usersWithDogs.observe(viewLifecycleOwner, {
             adapter.refresh(it.toMutableList())
         })
     }
@@ -47,12 +56,12 @@ class MainFragment : Fragment() {
     private fun setupAdapter() = with(binding) {
         rvUsers.adapter = adapter
         adapter.setOnItemClickListener {
-            Snackbar.make(requireView(), "User deleted", Snackbar.LENGTH_SHORT).show()
+//            viewModel.delete(it)
+//            Snackbar.make(requireView(), "User deleted", Snackbar.LENGTH_SHORT).show()
+//            viewModel.users.observe(viewLifecycleOwner, {list ->
+//                adapter.refresh(list.toMutableList())
+//            })
         }
-    }
-
-    private fun delete(user: User) {
-        viewModel.delete(user = user)
     }
 
     private fun search() {

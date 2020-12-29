@@ -15,6 +15,12 @@ android {
         versionCode 1
         versionName "1.0"
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.incremental":"true"]
+            }
+        }
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -63,6 +69,8 @@ dependencies {
     implementation "androidx.room:room-ktx:2.2.6"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
     implementation "android.arch.persistence.room:runtime:1.1.1"
+    implementation "androidx.room:room-runtime:2.3.0-alpha04"
+    annotationProcessor "androidx.room:room-compiler:2.3.0-alpha04"
 
     //Gson
     implementation 'com.google.code.gson:gson:2.8.6'

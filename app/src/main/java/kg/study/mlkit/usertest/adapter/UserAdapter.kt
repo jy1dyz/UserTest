@@ -5,34 +5,41 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kg.study.mlkit.usertest.databinding.ItemUserBinding
 import kg.study.mlkit.usertest.db.model.User
+import kg.study.mlkit.usertest.db.model.UserAndDog
+import kg.study.mlkit.usertest.db.model.UserWithDogs
 
 class UserAdapter: RecyclerView.Adapter<UserAdapter.UserHolder>() {
 
     private var list = mutableListOf<User>()
+    private var list2 = mutableListOf<UserAndDog>()
+    private var list3 = mutableListOf<UserWithDogs>()
     private lateinit var binding: ItemUserBinding
-    private var onItemClickListener: ((item: User) -> Unit)? = null
+    private var onItemClickListener: ((item: UserWithDogs) -> Unit)? = null
 
     inner class UserHolder(private val binding: ItemUserBinding): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(user: User) = with(binding) {
-            tvFirstName.text = user.firstName
-            tvLastName.text = user.lastName
+        fun bind(user: UserWithDogs) = with(binding) {
+            tvFirstName.text = user.user.firstName
+            tvLastName.text = user.user.lastName
+            var stringBuilder  = ""
+            user.dogs.forEach { dog ->
+                stringBuilder += dog.name.plus(" ")
+            }
+            tvDogName.text = stringBuilder
 
             userContainer.setOnClickListener {
-                list.remove(user)
-                notifyDataSetChanged()
+//                delete(user)
                 onItemClickListener?.invoke(user)
             }
         }
     }
     fun delete(user: User) {
-        val list2 = list.toMutableList()
-        list2.remove(user)
+        list.remove(user)
         notifyDataSetChanged()
     }
 
-    fun refresh(newList: MutableList<User>) {
-        this.list = newList
+    fun refresh(newList: MutableList<UserWithDogs>) {
+        this.list3 = newList
         notifyDataSetChanged()
     }
 
@@ -52,14 +59,18 @@ class UserAdapter: RecyclerView.Adapter<UserAdapter.UserHolder>() {
     }
 
     override fun onBindViewHolder(holder: UserHolder, position: Int) {
-        holder.bind(list[position])
+        holder.bind(list3[position])
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return list3.size
     }
 
-    fun setOnItemClickListener(listener: (item: User) -> Unit) {
+    fun getUserAt(position: Int): User {
+        return list[position]
+    }
+
+    fun setOnItemClickListener(listener: (item: UserWithDogs) -> Unit) {
         this.onItemClickListener = listener
     }
 

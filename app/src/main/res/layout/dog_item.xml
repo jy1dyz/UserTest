@@ -9,7 +9,7 @@
     android:layout_margin="10dp">
 
     <LinearLayout
-        android:id="@+id/user_container"
+        android:id="@+id/dog_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -20,36 +20,14 @@
         android:foreground="@drawable/ripple">
 
         <TextView
-            android:id="@+id/tv_first_name"
+            android:id="@+id/dog_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="Андрей"/>
+            android:text="Bob"/>
 
-        <TextView
-            android:id="@+id/tv_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:text="Marvel"/>
-
-        <TextView
-            android:id="@+id/tv_dog_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:text="Marvel"/>
-
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/dogs_list"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--            android:layout_margin="10dp"/>-->
 
     </LinearLayout>
 

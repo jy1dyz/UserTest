@@ -29,4 +29,14 @@ class MainRepository(private val userDao: UserDao) {
     fun findUserWithName(search: String): LiveData<List<User>> {
         return userDao.findUserWithName(search = search)
     }
+
+    /** One-to-One*/
+    fun getUsersAndDogs(): LiveData<List<UserAndDog>> {
+        return userDao.getUsersAndDogs()
+    }
+
+    /** One-to-Many*/
+    fun getUsersWithDogs(): LiveData<List<UserWithDogs>> {
+        return userDao.getUsersWithDogs()
+    }
 }
