@@ -6,7 +6,7 @@ import androidx.room.*
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(user: User)
+    suspend fun insert(vararg users: User)
 
     @Update
     suspend fun update(user: User)
@@ -17,7 +17,10 @@ interface UserDao {
     @Delete
     suspend fun deleteAllUsers(vararg users: User)
 
-    @Query("SELECT * FROM User")
+    @Query("DELETE FROM User")
+    suspend fun deleteAll()
+
+    @Query("SELECT * FROM User ORDER BY firstName ASC")
     fun getAllUsers(): LiveData<List<User>>
 
     @Query("SELECT * FROM User WHERE firstName LIKE :search OR lastName LIKE :search")

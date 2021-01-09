@@ -1,18 +1,20 @@
 package kg.study.mlkit.usertest.ui.main
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
-import android.view.*
-import android.widget.SearchView
-import androidx.core.content.ContextCompat.getSystemService
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.ItemTouchHelper
-import com.google.android.material.snackbar.Snackbar
 import kg.study.mlkit.usertest.adapter.DogsAdapter
 import kg.study.mlkit.usertest.adapter.UserAdapter
 import kg.study.mlkit.usertest.databinding.MainFragmentBinding
+import kg.study.mlkit.usertest.db.model.AppDatabase
 import kg.study.mlkit.usertest.db.model.User
+import kg.study.mlkit.usertest.db.model.populateDb
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
@@ -42,15 +44,24 @@ class MainFragment : Fragment() {
     }
 
     private fun setupObservers() = with(binding) {
-//        viewModel.users.observe(viewLifecycleOwner, {
+        viewModel.populateDb()
+        viewModel.users.observe(viewLifecycleOwner, {list ->
+            Log.w("TAG", "users=$list")
+//            list.forEach { user ->
+//                viewModel.insert(user)
+//            }
+            adapter.refresh(list.toMutableList())
+        })
+//        viewModel.getAllUsers().observe(viewLifecycleOwner, {
 //            adapter.refresh(it.toMutableList())
 //        })
 //        viewModel.usersAndDogs.observe(viewLifecycleOwner, {
 //            adapter.refresh(it.toMutableList())
 //        })
-        viewModel.usersWithDogs.observe(viewLifecycleOwner, {
-            adapter.refresh(it.toMutableList())
-        })
+//        viewModel.usersWithDogs.observe(viewLifecycleOwner, {
+//            adapter.refresh(it.toMutableList())
+//        })
+
     }
 
     private fun setupAdapter() = with(binding) {
@@ -61,7 +72,13 @@ class MainFragment : Fragment() {
 //            viewModel.users.observe(viewLifecycleOwner, {list ->
 //                adapter.refresh(list.toMutableList())
 //            })
+            delete(it)
+            adapter.notifyDataSetChanged()
         }
+    }
+
+    private fun delete(user: User) = with(binding) {
+        viewModel.delete(user)
     }
 
     private fun search() {

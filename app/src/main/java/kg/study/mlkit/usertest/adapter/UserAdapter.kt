@@ -14,18 +14,18 @@ class UserAdapter: RecyclerView.Adapter<UserAdapter.UserHolder>() {
     private var list2 = mutableListOf<UserAndDog>()
     private var list3 = mutableListOf<UserWithDogs>()
     private lateinit var binding: ItemUserBinding
-    private var onItemClickListener: ((item: UserWithDogs) -> Unit)? = null
+    private var onItemClickListener: ((item: User) -> Unit)? = null
 
     inner class UserHolder(private val binding: ItemUserBinding): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(user: UserWithDogs) = with(binding) {
-            tvFirstName.text = user.user.firstName
-            tvLastName.text = user.user.lastName
-            var stringBuilder  = ""
-            user.dogs.forEach { dog ->
-                stringBuilder += dog.name.plus(" ")
-            }
-            tvDogName.text = stringBuilder
+        fun bind(user: User) = with(binding) {
+            tvFirstName.text = user.firstName
+            tvLastName.text = user.lastName
+//            var stringBuilder  = ""
+//            user.dogs.forEach { dog ->
+//                stringBuilder += dog.name.plus(" ")
+//            }
+//            tvDogName.text = stringBuilder
 
             userContainer.setOnClickListener {
 //                delete(user)
@@ -38,8 +38,8 @@ class UserAdapter: RecyclerView.Adapter<UserAdapter.UserHolder>() {
         notifyDataSetChanged()
     }
 
-    fun refresh(newList: MutableList<UserWithDogs>) {
-        this.list3 = newList
+    fun refresh(newList: MutableList<User>) {
+        this.list = newList
         notifyDataSetChanged()
     }
 
@@ -59,18 +59,18 @@ class UserAdapter: RecyclerView.Adapter<UserAdapter.UserHolder>() {
     }
 
     override fun onBindViewHolder(holder: UserHolder, position: Int) {
-        holder.bind(list3[position])
+        holder.bind(list[position])
     }
 
     override fun getItemCount(): Int {
-        return list3.size
+        return list.size
     }
 
     fun getUserAt(position: Int): User {
         return list[position]
     }
 
-    fun setOnItemClickListener(listener: (item: UserWithDogs) -> Unit) {
+    fun setOnItemClickListener(listener: (item: User) -> Unit) {
         this.onItemClickListener = listener
     }
 

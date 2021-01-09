@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kg.study.mlkit.usertest.db.model.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
@@ -14,11 +16,12 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
     private val _usersAndDogs = MutableLiveData<List<UserAndDog>>()
     private val _usersWithDogs = MutableLiveData<List<UserWithDogs>>()
 
-    var users: LiveData<List<User>> = _users
+    val users: LiveData<List<User>>
     val usersAndDogs: LiveData<List<UserAndDog>> = _usersAndDogs
     val usersWithDogs: LiveData<List<UserWithDogs>> = _usersWithDogs
 
     init {
+        users = repository.getAllUsers()
 //        _users.postValue(
 //            listOf(
 //                User("Jane", "Doe"),
@@ -46,20 +49,36 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
 //            )
 //        )
 
-        _usersWithDogs.postValue(
-            listOf(
-                UserWithDogs(User(1, "Jane", "Doe"), listOf(Dog(1, 1, "Bob"), Dog(1,1,"Poppy"))),
-                UserWithDogs(User(2, "Anna", "Dilan"), listOf(Dog(2, 2, "Bobby"), Dog(2,2,"Puppy"),
-                Dog(2,2,"Fox"))),
-                UserWithDogs(User(3, "Hanna", "Montana"), listOf(Dog(3, 3, "Billy"))),
-                UserWithDogs(User(4, "Will", "Smith"), listOf(Dog(4, 4, "Puppy"))),
-            )
-        )
+//        _usersWithDogs.postValue(
+//            listOf(
+//                UserWithDogs(User(1, "Jane", "Doe"), listOf(Dog(1, 1, "Bob"), Dog(1,1,"Poppy"))),
+//                UserWithDogs(User(2, "Anna", "Dilan"), listOf(Dog(2, 2, "Bobby"), Dog(2,2,"Puppy"),
+//                Dog(2,2,"Fox"))),
+//                UserWithDogs(User(3, "Hanna", "Montana"), listOf(Dog(3, 3, "Billy"))),
+//                UserWithDogs(User(4, "Will", "Smith"), listOf(Dog(4, 4, "Puppy"))),
+//            )
+//        )
     }
 
     fun insert(user: User) {
         viewModelScope.launch {
-            repository.insert(user = user)
+            _users.postValue(listOf(User(1, "Jane", "Doe"),
+                    User(2, "Kate", "Moss"),
+                    User(3, "Katie", "Holms"),
+                    User(4, "Anjelina", "Jolie"),
+                    User(5, "Kate", "Hudson")
+            ))
+            _users.value?.forEach { user ->
+                repository.insert(user)
+            }
+        }
+    }
+    suspend fun insertUser(user: User) = withContext(Dispatchers.IO) {
+
+    }
+    fun populateDb() {
+        viewModelScope.launch {
+            repository.populateDb()
         }
     }
 
@@ -80,6 +99,11 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
             repository.deleteAllUsers(users = users)
         }
     }
+    fun deleteAll() {
+        viewModelScope.launch {
+            repository.deleteAll()
+        }
+    }
 
     fun getAllUsers(): LiveData<List<User>> {
         return users
@@ -96,7 +120,7 @@ class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
     /** One-to-Many*/
     fun gUsersWithDogs(): LiveData<List<UserWithDogs>> {
-        return repository.getUsersWithDogs()
+        return usersWithDogs
     }
 
 }

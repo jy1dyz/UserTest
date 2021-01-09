@@ -36,13 +36,13 @@
             android:textSize="18sp"
             android:text="Marvel"/>
 
-        <TextView
-            android:id="@+id/tv_dog_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:text="Marvel"/>
+<!--        <TextView-->
+<!--            android:id="@+id/tv_dog_name"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="18sp"-->
+<!--            android:text="Marvel"/>-->
 
 <!--        <androidx.recyclerview.widget.RecyclerView-->
 <!--            android:id="@+id/dogs_list"-->
